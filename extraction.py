@@ -73,6 +73,9 @@ def obtenir_jeton():
             raison = f"{erreur.get('error', '')} {erreur.get('error_description', '')}".strip()
         except ValueError:
             raison = "réponse illisible"
+        # Indices sans révéler les codes : début de l'identifiant et longueurs
+        print(f"   Identifiant commence par PAR_ : {'oui' if client_id.startswith('PAR_') else 'NON'}, "
+              f"{len(client_id)} caractères ; clé secrète : {len(client_secret)} caractères.")
         sys.exit(f"❌ Connexion à l'API refusée (code {reponse.status_code}, raison : {raison}). "
                  "Vérifie tes identifiants et que l'API « Offres d'emploi v2 » est cochée.")
     print("✅ Étape 1 : connexion à l'API France Travail réussie.")
