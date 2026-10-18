@@ -42,9 +42,17 @@ def lire_fichier_env():
                 os.environ.setdefault(cle.strip(), valeur.strip().strip('"'))
 
 
+def nettoyer(nom):
+    """Corrige les erreurs de copier-coller : espaces, guillemets, « NOM= » collé avec."""
+    valeur = re.sub(r"\s", "", os.environ.get(nom, "")).strip("\"'")
+    return valeur.removeprefix(f"{nom}=").strip("\"'")
+
+
 def obtenir_jeton():
-    client_id = os.environ.get("FT_CLIENT_ID", "").strip()
-    client_secret = os.environ.get("FT_CLIENT_SECRET", "").strip()
+    client_id = nettoyer("FT_CLIENT_ID")
+    client_secret = nettoyer("FT_CLIENT_SECRET")
+    if client_secret.startswith("PAR_") and not client_id.startswith("PAR_"):
+        client_id, client_secret = client_secret, client_id   # secrets inversés
     if not client_id or not client_secret:
         sys.exit("❌ Identifiants absents : FT_CLIENT_ID et FT_CLIENT_SECRET sont vides.")
 
