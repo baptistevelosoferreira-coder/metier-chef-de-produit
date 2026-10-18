@@ -60,7 +60,12 @@ def obtenir_jeton():
         timeout=30,
     )
     if reponse.status_code != 200:
-        sys.exit(f"❌ Connexion à l'API refusée (code {reponse.status_code}). "
+        try:
+            erreur = reponse.json()
+            raison = f"{erreur.get('error', '')} {erreur.get('error_description', '')}".strip()
+        except ValueError:
+            raison = "réponse illisible"
+        sys.exit(f"❌ Connexion à l'API refusée (code {reponse.status_code}, raison : {raison}). "
                  "Vérifie tes identifiants et que l'API « Offres d'emploi v2 » est cochée.")
     print("✅ Étape 1 : connexion à l'API France Travail réussie.")
     return reponse.json()["access_token"]
