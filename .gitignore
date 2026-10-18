@@ -1,2 +1,3 @@
 # Identifiants France Travail : ne jamais les envoyer sur GitHub
 .env
+__pycache__/
